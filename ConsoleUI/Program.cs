@@ -25,11 +25,19 @@ namespace ConsoleUI
         {
             ProductManager productManager = new ProductManager(new EfProductDal());
 
-            Console.WriteLine("{0,35} -- {1,15} -- {2,5} \n", "ProductName", "CategoryName", "Stock");
-            foreach (var product in productManager.GetProductDetails())
+            var result = productManager.GetProductDetails();
+
+            if (result.Success)
             {
-                Console.WriteLine("{0,35} -- {1,15} -- {2,5}", product.ProductName, product.CategoryName,
-                    product.UnitsInStock);
+                Console.WriteLine("{0,35} -- {1,15} -- {2,5} \n", "ProductName", "CategoryName", "Stock");
+                foreach (var product in result.Data)
+                {
+                    Console.WriteLine("{0,35} -- {1,15} -- {2,5}", product.ProductName, product.CategoryName,product.UnitsInStock);
+                }
+            }
+            else
+            {
+                Console.WriteLine(result.Message);
             }
         }
 
@@ -74,7 +82,7 @@ namespace ConsoleUI
                     new ProductManager(new EfProductDal()); //Sadece kullanimdaki teknolojiyi cagirmamiz yeterli
 
             Console.WriteLine("{0,35} -- {1,5} -- {2,5}\n", "Product Name", "Price($)", "Stock");
-            foreach (var product in productManager.GetAll())
+            foreach (var product in productManager.GetAll().Data)
             {
                 Console.WriteLine("{0,35} -- {1,8} -- {2,5}", product.ProductName, product.UnitPrice,
                     product.UnitsInStock);
@@ -86,7 +94,7 @@ namespace ConsoleUI
             ProductManager productManager = new ProductManager(new EfProductDal());
 
             Console.WriteLine("{0} numarali categoriye ait ürün isimleri gelsin\n", categoryId);
-            foreach (var product in productManager.GetAllByCategoryId(categoryId))
+            foreach (var product in productManager.GetAllByCategoryId(categoryId).Data)
             {
                 Console.WriteLine(product.ProductName);
             }
