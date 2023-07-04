@@ -8,7 +8,7 @@
             Message = message;
         }
 
-        public Result(bool success)
+        public Result(bool success) //sadece success döndürmek istersek
         {
             Success = success;
         }
