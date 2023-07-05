@@ -8,7 +8,7 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
-            // GetAllProductTest();
+             GetAllProductTest();
 
             // GetAllProductByCategoryIdTest(2); //2 numarali categoriye ait ürün isimleri gelsin
 
@@ -18,7 +18,7 @@ namespace ConsoleUI
 
             // GetAllOrderByShipCityTest();
 
-            GetAllProductWithCategoryNameTest();
+           // GetAllProductWithCategoryNameTest();
         }
 
         private static void GetAllProductWithCategoryNameTest()

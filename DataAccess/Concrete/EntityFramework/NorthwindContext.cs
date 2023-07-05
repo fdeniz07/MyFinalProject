@@ -9,7 +9,7 @@ namespace DataAccess.Concrete.EntityFramework
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Data Source=APACHIE; Initial Catalog=Northwind; Integrated Security=True");
+            optionsBuilder.UseSqlServer(@"Data Source=APACHIE;Initial Catalog=Northwind;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
         }
 
         public DbSet<Category> Categories { get; set; }
