@@ -12,6 +12,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//IoC Container -- Inversion of Control --> Autofac, Ninject, CastleWindsor, StructureMap, LightInject, DryInject
+
 //Business Service'leri --> Daha sonra kendi katmaninda ServiceRegistration class'inda toplanip buraya referans edilecekler.
 builder.Services.AddSingleton<IProductService, ProductManager>();
 

@@ -10,6 +10,7 @@ namespace WebAPI.Controllers
     {
         //Loosely coupled - gevsek baglilik
         //naming convention --> isimlendirme kurallari private readonly _serviceName
+        //IoC Container -- Inversion of Control 
         IProductService _productService;
 
         public ProductsController(IProductService productService)
@@ -18,12 +19,19 @@ namespace WebAPI.Controllers
         }
 
 
-        [HttpGet]
-        public List<Product> Get()
+        [HttpGet("getall")]
+        public IActionResult GetAll()
         {
             //IProductService productService = new ProductManager(new EfProductDal());
             var result = _productService.GetAll();
-            return result.Data;
+
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+
+
+            return BadRequest(result);
 
 
             //return new List<Product>
@@ -31,6 +39,31 @@ namespace WebAPI.Controllers
             //    new Product { ProductId = 1, ProductName = "Elma" },
             //    new Product { ProductId = 2, ProductName = "Armut" }
             //};
+        }
+
+        [HttpGet("getbyid")]
+        public IActionResult GetById(int id)
+        {
+            var result = _productService.GetById(id);
+
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+
+            return BadRequest(result);
+        }
+
+        [HttpPost("add")]
+        public IActionResult Add(Product product)
+        {
+            var result = _productService.Add(product);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+
+            return BadRequest(result);
         }
     }
 }
