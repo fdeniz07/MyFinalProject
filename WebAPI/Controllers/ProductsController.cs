@@ -18,7 +18,6 @@ namespace WebAPI.Controllers
             _productService = productService;
         }
 
-
         [HttpGet("getall")]
         public IActionResult GetAll()
         {
@@ -29,16 +28,15 @@ namespace WebAPI.Controllers
             {
                 return Ok(result);
             }
-
-
             return BadRequest(result);
 
-
+            #region Eski Kodlar
             //return new List<Product>
             //{
             //    new Product { ProductId = 1, ProductName = "Elma" },
             //    new Product { ProductId = 2, ProductName = "Armut" }
             //};
+            #endregion
         }
 
         [HttpGet("getbyid")]
@@ -50,7 +48,6 @@ namespace WebAPI.Controllers
             {
                 return Ok(result);
             }
-
             return BadRequest(result);
         }
 
@@ -62,7 +59,6 @@ namespace WebAPI.Controllers
             {
                 return Ok(result);
             }
-
             return BadRequest(result);
         }
     }

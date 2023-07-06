@@ -1,7 +1,6 @@
-using Business.Abstract;
-using Business.Concrete;
-using DataAccess.Abstract;
-using DataAccess.Concrete.EntityFramework;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Business.DependencyResolvers.Autofac;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,14 +11,16 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//AOP
 //IoC Container -- Inversion of Control --> Autofac, Ninject, CastleWindsor, StructureMap, LightInject, DryInject
+//AOP
+//Postsharp --> ancak kurumsal ve ücretli altyapi mevcut 
 
-//Business Service'leri --> Daha sonra kendi katmaninda ServiceRegistration class'inda toplanip buraya referans edilecekler.
-builder.Services.AddSingleton<IProductService, ProductManager>();
-
-//DataAccess Interface'leri --> Daha sonra kendi katmaninda ServiceRegistration class'inda toplanip buraya referans edilecekler.
-builder.Services.AddSingleton<IProductDal, EfProductDal>();
-
+//builder.Services.AddSingleton<IProductService, ProductManager>();
+//builder.Services.AddSingleton<IProductDal, EfProductDal>();
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory(options =>
+    options.RegisterModule(new AutofacBusinessModule())
+));
 
 var app = builder.Build();
 
@@ -37,3 +38,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+ 
