@@ -1,14 +1,13 @@
-﻿using System;
-using Business.Abstract;
+﻿using Business.Abstract;
+using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
+using System;
 using System.Collections.Generic;
-using Business.Constants;
-using Business.ValidationRules.FluentValidation;
-using Core.CrossCuttingConcerns.Validation.FluentValidation;
-using Core.Utilities.Results;
-using FluentValidation;
 
 namespace Business.Concrete
 {
@@ -21,8 +20,11 @@ namespace Business.Concrete
             _productDal = productDal;
         }
 
+        [ValidationAspect(typeof(ProductValidator))]
         public IResult Add(Product product)
         {
+            #region Attribute Öncesi Kod Yapisi
+
             #region Kötü kodun iyilestirilip, CrossCuttingConcerns olarak ele alinmasi
 
             //var context = new ValidationContext<Product>(product);
@@ -45,13 +47,14 @@ namespace Business.Concrete
 
             #endregion
 
-            ValidationTool.Validate(new ProductValidator(),product);
+           // ValidationTool.Validate(new ProductValidator(), product);
             //Loglama
             //cacheremove
             //performance
             //transaction
             //yetkilendirme
 
+            # endregion
 
             //business codes
 
