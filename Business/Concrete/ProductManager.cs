@@ -5,7 +5,10 @@ using Entities.Concrete;
 using Entities.DTOs;
 using System.Collections.Generic;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.CrossCuttingConcerns.Validation.FluentValidation;
 using Core.Utilities.Results;
+using FluentValidation;
 
 namespace Business.Concrete
 {
@@ -20,12 +23,37 @@ namespace Business.Concrete
 
         public IResult Add(Product product)
         {
+            #region Kötü kodun iyilestirilip, CrossCuttingConcerns olarak ele alinmasi
+
+            //var context = new ValidationContext<Product>(product);
+            //ProductValidator productValidator = new ProductValidator();
+
+            //var result = productValidator.Validate(context);
+            //if (!result.IsValid)
+            //{
+            //    throw new ValidationException(result.Errors);
+            //}
+
+            //Fluent Validation öncesi validasyon islemi
+
+            //if (product.ProductName.Length < 2)
+            //{
+            //    //magic strings
+            //    return new ErrorResult(Messages.ProductNameInvalid);
+            //}
+
+
+            #endregion
+
+            ValidationTool.Validate(new ProductValidator(),product);
+            //Loglama
+            //cacheremove
+            //performance
+            //transaction
+            //yetkilendirme
+
+
             //business codes
-            if (product.ProductName.Length < 2)
-            {
-                //magic strings
-                return new ErrorResult(Messages.ProductNameInvalid);
-            }
 
             _productDal.Add(product);
 
