@@ -7,13 +7,14 @@ using System.Linq;
 
 namespace Core.Aspects.Autofac.Validation
 {
-    public class ValidationAspect : MethodInterception
+    public class ValidationAspect : MethodInterception //Aspect: Metodun basinda,ortasinda,hata verdiginde,sonunda calisacak yapi demektir.
     {
         private Type _validatorType; //Bu bir attribute
 
         //Burada ilgili attribute'ü aliyoruz. Yani hangi sinifa ait attribute olacak.
         public ValidationAspect(Type validatorType) // Attribute'ler Type yapisi ile kullanilirlar!
         {
+            //defensive coding
             if (!typeof(IValidator).IsAssignableFrom(validatorType))
             {
                 throw new System.Exception("Bu bir dogrulama sinifi degil");
