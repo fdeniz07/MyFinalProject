@@ -8,5 +8,7 @@
         public static string ProductNameInvalid = "Ürün ismi gecersiz";
         public static string MaintenanceTime = "Sistem bakimda";
         public static string ProductsListed = "Ürünler listelendi";
+        public static string ProductCountOfCategoryError ="Bir kategoride en fazla {0} olabilir!";
+        public static string ProductNameAlreadyExists = "Ayni ürün adina sahip baska bir ürün var!";
     }
 }

@@ -8,6 +8,7 @@ using Entities.Concrete;
 using Entities.DTOs;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Business.Concrete
 {
@@ -44,7 +45,6 @@ namespace Business.Concrete
             //    return new ErrorResult(Messages.ProductNameInvalid);
             //}
 
-
             #endregion
 
             // ValidationTool.Validate(new ProductValidator(), product);
@@ -55,13 +55,34 @@ namespace Business.Concrete
             //yetkilendirme
 
             #endregion
+            
+            return CheckIfProductNameExist(product.ProductName);
 
-                //business codes
 
+            if (CheckIfProductCountOfCategoryCorrect(product.CategoryId).Success)
+            {
                 _productDal.Add(product);
 
                 return new SuccessResult(Messages.ProductAdded);
-          
+            }
+            return new SuccessResult();
+        }
+
+        private IResult CheckIfProductNameExist(string productName)
+        {
+            //Ayni isimde ürün eklenemez
+
+            var result = _productDal.GetAll(p => p.ProductName == productName).Any();
+            if (result)
+            {
+                return new ErrorResult(Messages.ProductNameAlreadyExists);
+            }
+            return new ErrorResult();
+        }
+
+        public IResult Delete(int productId)
+        {
+            throw new NotImplementedException();
         }
 
         public IDataResult<List<Product>> GetAll()
@@ -73,7 +94,6 @@ namespace Business.Concrete
             {
                 return new ErrorDataResult<List<Product>>(Messages.MaintenanceTime);
             }
-
             return new SuccessDataResult<List<Product>>(_productDal.GetAll(), Messages.ProductsListed);
         }
 
@@ -99,8 +119,35 @@ namespace Business.Concrete
             {
                 return new ErrorDataResult<List<ProductDetailDto>>(Messages.MaintenanceTime);
             }
-
             return new SuccessDataResult<List<ProductDetailDto>>(_productDal.GetProductDetails());
+        }
+
+        [ValidationAspect(typeof(ProductValidator))]
+        public IResult Update(Product product)
+        {
+            if (CheckIfProductCountOfCategoryCorrect(product.CategoryId).Success)
+            {
+                _productDal.Update(product);
+
+                return new SuccessResult(Messages.ProductAdded);
+            }
+            return new SuccessResult();
+        }
+
+
+        //Bir kategoride en fazla 15 ürün olabilir
+        private IResult CheckIfProductCountOfCategoryCorrect(int categoryId)
+        {
+            //Select count(*) from products where categoryId=1
+            var criterion = 15;
+            var result = _productDal.GetAll(p => p.CategoryId == categoryId).Count;
+            if (result > criterion)
+            {
+                {
+                    return new ErrorResult(String.Format(Messages.ProductCountOfCategoryError, criterion));
+                }
+            }
+            return new SuccessResult();
         }
     }
 }
