@@ -9,6 +9,7 @@ using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Core.Utilities.Business;
 
 namespace Business.Concrete
 {
@@ -55,29 +56,72 @@ namespace Business.Concrete
             //yetkilendirme
 
             #endregion
-            
-            return CheckIfProductNameExist(product.ProductName);
 
+            IResult result = BusinessRules.Run(CheckIfProductNameExist(product.ProductName),
+                CheckIfProductCountOfCategoryCorrect(product.CategoryId));
 
-            if (CheckIfProductCountOfCategoryCorrect(product.CategoryId).Success)
+            if (result != null)
             {
-                _productDal.Add(product);
-
-                return new SuccessResult(Messages.ProductAdded);
+                return result;
             }
-            return new SuccessResult();
+
+            _productDal.Add(product);
+            return new SuccessResult(Messages.ProductAdded);
+
+            #region Before Code Review
+
+            //if (CheckIfProductCountOfCategoryCorrect(product.CategoryId).Success) //Burada && ile gidilebilir ama kod okunurlugu azalir
+            //{
+            //    if (CheckIfProductNameExist(product.ProductName).Success)
+            //    {
+            //        _productDal.Add(product);
+            //        return new SuccessResult(Messages.ProductAdded);
+            //    }
+            //}
+            //return new ErrorResult();
+
+            #endregion
         }
 
-        private IResult CheckIfProductNameExist(string productName)
+        private IResult CheckIfProductNameExist(string productName) //Ayni isimde ürün eklenemez
         {
-            //Ayni isimde ürün eklenemez
-
             var result = _productDal.GetAll(p => p.ProductName == productName).Any();
             if (result)
             {
                 return new ErrorResult(Messages.ProductNameAlreadyExists);
             }
+
             return new ErrorResult();
+        }
+
+        private IResult CheckIfProductCountOfCategoryCorrect(int categoryId) //Bir kategoride en fazla 15 ürün olabilir
+        {
+            //Select count(*) from products where categoryId=1
+            var criterion = 15;
+            var result = _productDal.GetAll(p => p.CategoryId == categoryId).Count;
+            if (result > criterion)
+            {
+                {
+                    return new ErrorResult(String.Format(Messages.ProductCountOfCategoryError, criterion));
+                }
+            }
+
+            return new SuccessResult();
+        }
+
+        [ValidationAspect(typeof(ProductValidator))]
+        public IResult Update(Product product)
+        {
+            if (CheckIfProductCountOfCategoryCorrect(product.CategoryId).Success)
+            {
+                if (CheckIfProductNameExist(product.ProductName).Success)
+                {
+                    _productDal.Update(product);
+                    return new SuccessResult(Messages.ProductAdded);
+                }
+            }
+
+            return new SuccessResult();
         }
 
         public IResult Delete(int productId)
@@ -94,6 +138,7 @@ namespace Business.Concrete
             {
                 return new ErrorDataResult<List<Product>>(Messages.MaintenanceTime);
             }
+
             return new SuccessDataResult<List<Product>>(_productDal.GetAll(), Messages.ProductsListed);
         }
 
@@ -119,35 +164,8 @@ namespace Business.Concrete
             {
                 return new ErrorDataResult<List<ProductDetailDto>>(Messages.MaintenanceTime);
             }
+
             return new SuccessDataResult<List<ProductDetailDto>>(_productDal.GetProductDetails());
-        }
-
-        [ValidationAspect(typeof(ProductValidator))]
-        public IResult Update(Product product)
-        {
-            if (CheckIfProductCountOfCategoryCorrect(product.CategoryId).Success)
-            {
-                _productDal.Update(product);
-
-                return new SuccessResult(Messages.ProductAdded);
-            }
-            return new SuccessResult();
-        }
-
-
-        //Bir kategoride en fazla 15 ürün olabilir
-        private IResult CheckIfProductCountOfCategoryCorrect(int categoryId)
-        {
-            //Select count(*) from products where categoryId=1
-            var criterion = 15;
-            var result = _productDal.GetAll(p => p.CategoryId == categoryId).Count;
-            if (result > criterion)
-            {
-                {
-                    return new ErrorResult(String.Format(Messages.ProductCountOfCategoryError, criterion));
-                }
-            }
-            return new SuccessResult();
         }
     }
 }
