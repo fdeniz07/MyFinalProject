@@ -23,7 +23,7 @@ namespace ConsoleUI
 
         private static void GetAllProductWithCategoryNameTest()
         {
-            ProductManager productManager = new ProductManager(new EfProductDal());
+            ProductManager productManager = new ProductManager(new EfProductDal(), new CategoryManager(new EfCategoryDal()));
 
             var result = productManager.GetProductDetails();
 
@@ -57,7 +57,7 @@ namespace ConsoleUI
             CategoryManager categoryManager = new CategoryManager(new EfCategoryDal());
 
             Console.WriteLine("*************** Category List *********************");
-            foreach (var category in categoryManager.GetAll())
+            foreach (var category in categoryManager.GetAll().Data)
             {
                 Console.WriteLine(category.CategoryName);
             }
@@ -79,7 +79,7 @@ namespace ConsoleUI
             //ProductManager productManager = new ProductManager(new InMemoryProductDal());
             ProductManager
                 productManager =
-                    new ProductManager(new EfProductDal()); //Sadece kullanimdaki teknolojiyi cagirmamiz yeterli
+                    new ProductManager(new EfProductDal(), new CategoryManager(new EfCategoryDal())); //Sadece kullanimdaki teknolojiyi cagirmamiz yeterli
 
             Console.WriteLine("{0,35} -- {1,5} -- {2,5}\n", "Product Name", "Price($)", "Stock");
             foreach (var product in productManager.GetAll().Data)
@@ -91,7 +91,7 @@ namespace ConsoleUI
 
         private static void GetAllProductByCategoryIdTest(int categoryId)
         {
-            ProductManager productManager = new ProductManager(new EfProductDal());
+            ProductManager productManager = new ProductManager(new EfProductDal(), new CategoryManager(new EfCategoryDal()));
 
             Console.WriteLine("{0} numarali categoriye ait ürün isimleri gelsin\n", categoryId);
             foreach (var product in productManager.GetAllByCategoryId(categoryId).Data)

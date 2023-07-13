@@ -16,10 +16,12 @@ namespace Business.Concrete
     public class ProductManager : IProductService
     {
         IProductDal _productDal;
+        private ICategoryService _categoryService;
 
-        public ProductManager(IProductDal productDal)
+        public ProductManager(IProductDal productDal, ICategoryService categoryService)
         {
             _productDal = productDal;
+            _categoryService = categoryService;
         }
 
         [ValidationAspect(typeof(ProductValidator))]
@@ -58,7 +60,7 @@ namespace Business.Concrete
             #endregion
 
             IResult result = BusinessRules.Run(CheckIfProductNameExist(product.ProductName),
-                CheckIfProductCountOfCategoryCorrect(product.CategoryId));
+                CheckIfProductCountOfCategoryCorrect(product.CategoryId),CheckIfCategoryLimitExceded());
 
             if (result != null)
             {
@@ -93,7 +95,6 @@ namespace Business.Concrete
 
             return new ErrorResult();
         }
-
         private IResult CheckIfProductCountOfCategoryCorrect(int categoryId) //Bir kategoride en fazla 15 ürün olabilir
         {
             //Select count(*) from products where categoryId=1
@@ -106,6 +107,16 @@ namespace Business.Concrete
                 }
             }
 
+            return new SuccessResult();
+        }
+
+        private IResult CheckIfCategoryLimitExceded() //Bir kategoriye 15 den fazla ürün eklenemez
+        {
+            var result = _categoryService.GetAll();
+            if (result.Data.Count>15)
+            {
+                return new ErrorResult(Messages.CategoryLimitExceded);
+            }
             return new SuccessResult();
         }
 

@@ -2,6 +2,7 @@
 using DataAccess.Abstract;
 using Entities.Concrete;
 using System.Collections.Generic;
+using Core.Utilities.Results;
 
 namespace Business.Concrete
 {
@@ -14,16 +15,16 @@ namespace Business.Concrete
             _categoryDal = categoryDal;
         }
 
-        public List<Category> GetAll()
+        public IDataResult<List<Category>> GetAll()
         {
             //Is kodlari
-            return _categoryDal.GetAll();
+            return new SuccessDataResult<List<Category>>(_categoryDal.GetAll());
         }
 
         //Select * from Categories where CategoryId=3
-        public Category GetById(int id)
+        public IDataResult<Category> GetById(int categoryId)
         {
-            return _categoryDal.Get(c => c.CategoryId == id);
+            return new SuccessDataResult<Category>(_categoryDal.Get(c => c.CategoryId == categoryId));
         }
     }
 }

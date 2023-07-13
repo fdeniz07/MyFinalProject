@@ -10,5 +10,6 @@
         public static string ProductsListed = "Ürünler listelendi";
         public static string ProductCountOfCategoryError ="Bir kategoride en fazla {0} olabilir!";
         public static string ProductNameAlreadyExists = "Ayni ürün adina sahip baska bir ürün var!";
+        public static string CategoryLimitExceded = "Kategori limiti asildigi icin yeni ürün eklenemiyor!";
     }
 }
