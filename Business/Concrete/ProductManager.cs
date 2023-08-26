@@ -9,6 +9,7 @@ using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Business.BusinessAspects.Autofac;
 using Core.Utilities.Business;
 
 namespace Business.Concrete
@@ -120,6 +121,8 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
+        //Claim
+        [SecuredOperation("product.add,admin")]
         [ValidationAspect(typeof(ProductValidator))]
         public IResult Update(Product product)
         {
