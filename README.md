@@ -21,6 +21,8 @@
 - ASP.NET Core Identity - <img src="https://banner2.cleanpng.com/20180318/wwe/kisspng-check-mark-computer-icons-royalty-free-clip-art-blue-check-mark-5aae2bc6a7d722.9474025515213639106875.jpg" width=25px height=15px/>
 - Authentication & Authorization - <img src="https://banner2.cleanpng.com/20180318/wwe/kisspng-check-mark-computer-icons-royalty-free-clip-art-blue-check-mark-5aae2bc6a7d722.9474025515213639106875.jpg" width=25px height=15px/>
 - JWT (JSON Web Token) - <img src="https://banner2.cleanpng.com/20180318/wwe/kisspng-check-mark-computer-icons-royalty-free-clip-art-blue-check-mark-5aae2bc6a7d722.9474025515213639106875.jpg" width=25px height=15px/>
+- SOLID - <img src="https://banner2.cleanpng.com/20180318/wwe/kisspng-check-mark-computer-icons-royalty-free-clip-art-blue-check-mark-5aae2bc6a7d722.9474025515213639106875.jpg" width=25px height=15px/>
+- CLEAN CODE - <img src="https://banner2.cleanpng.com/20180318/wwe/kisspng-check-mark-computer-icons-royalty-free-clip-art-blue-check-mark-5aae2bc6a7d722.9474025515213639106875.jpg" width=25px height=15px/>
 <!--
 - File Upload  - <img src="https://banner2.cleanpng.com/20180318/wwe/kisspng-check-mark-computer-icons-royalty-free-clip-art-blue-check-mark-5aae2bc6a7d722.9474025515213639106875.jpg" width=25px height=15px/>
 - AutoMapper Library - <img src="https://banner2.cleanpng.com/20180318/wwe/kisspng-check-mark-computer-icons-royalty-free-clip-art-blue-check-mark-5aae2bc6a7d722.9474025515213639106875.jpg" width=25px height=15px/>
