@@ -7,7 +7,6 @@ using Core.Utilities.Interceptors;
 using Core.Utilities.Security.JWT;
 using DataAccess.Abstract;
 using DataAccess.Concrete.EntityFramework;
-using Microsoft.AspNetCore.Http;
 
 namespace Business.DependencyResolvers.Autofac
 {
@@ -26,8 +25,6 @@ namespace Business.DependencyResolvers.Autofac
 
             builder.RegisterType<AuthManager>().As<IAuthService>();
             builder.RegisterType<JwtHelper>().As<ITokenHelper>();
-
-            builder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>();
 
             //Autofac bize .Net mimarisi disinda Interceptor görevi kazandiriyor. Yukaridaki tün siniflari tariyor, bu class'larin Aspect'i var mi diye tariyor.
             //Asagidaki kod blogu ile calisan uygulama icerisinde implemente edilmis interface'leri bul

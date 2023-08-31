@@ -25,6 +25,7 @@ namespace Business.Concrete
             _categoryService = categoryService;
         }
 
+        [SecuredOperation("product.add,admin")]
         [ValidationAspect(typeof(ProductValidator))]
         public IResult Add(Product product)
         {
@@ -94,7 +95,7 @@ namespace Business.Concrete
                 return new ErrorResult(Messages.ProductNameAlreadyExists);
             }
 
-            return new ErrorResult();
+            return new SuccessResult();
         }
         private IResult CheckIfProductCountOfCategoryCorrect(int categoryId) //Bir kategoride en fazla 15 ürün olabilir
         {
@@ -104,7 +105,7 @@ namespace Business.Concrete
             if (result > criterion)
             {
                 {
-                    return new ErrorResult(String.Format(Messages.ProductCountOfCategoryError, criterion));
+                    return new ErrorResult(string.Format(Messages.ProductCountOfCategoryError, criterion));
                 }
             }
 

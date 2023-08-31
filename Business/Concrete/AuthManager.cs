@@ -33,7 +33,7 @@ namespace Business.Concrete
                 Status = true
             };
             _userService.Add(user);
-            return new SuccessDataResult<User>(user, Messages.UserRegistiratitionSuccess);
+            return new SuccessDataResult<User>(user, Messages.UserRegistrationSuccess);
         }
 
         public IDataResult<User> Login(UserForLoginDto userForLoginDto)
