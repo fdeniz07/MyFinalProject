@@ -82,7 +82,7 @@ namespace ConsoleUI
                     new ProductManager(new EfProductDal(), new CategoryManager(new EfCategoryDal())); //Sadece kullanimdaki teknolojiyi cagirmamiz yeterli
 
             Console.WriteLine("{0,35} -- {1,5} -- {2,5}\n", "Product Name", "Price($)", "Stock");
-            foreach (var product in productManager.GetAll().Data)
+            foreach (var product in productManager.GetList().Data)
             {
                 Console.WriteLine("{0,35} -- {1,8} -- {2,5}", product.ProductName, product.UnitPrice,
                     product.UnitsInStock);
@@ -94,7 +94,7 @@ namespace ConsoleUI
             ProductManager productManager = new ProductManager(new EfProductDal(), new CategoryManager(new EfCategoryDal()));
 
             Console.WriteLine("{0} numarali categoriye ait ürün isimleri gelsin\n", categoryId);
-            foreach (var product in productManager.GetAllByCategoryId(categoryId).Data)
+            foreach (var product in productManager.GetListByCategory(categoryId).Data)
             {
                 Console.WriteLine(product.ProductName);
             }

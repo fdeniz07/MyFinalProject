@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using Castle.DynamicProxy;
+using Core.Aspects.Autofac.Performance;
 
 namespace Core.Utilities.Interceptors;
 
@@ -20,6 +21,9 @@ public class AspectInterceptorSelector : IInterceptorSelector
 
         classAttributes.AddRange(methodAttributes);
         // classAttributes.Add(new ExceptionLogAspect(typeof(FileLogger))); -->Loglama alt yapisi icin eklenir
+
+
+        classAttributes.Add(new PerformanceAspect(5)); // Bu sekilde yapilirsa tüm metotlar icin 5ms performans yapilacatir.
 
 
         //En sonunda Priority sirasina göre islemleri siraliyoruz

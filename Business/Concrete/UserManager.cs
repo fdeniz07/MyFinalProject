@@ -55,7 +55,7 @@ namespace Business.Concrete
 
         //private IResult CheckIfUserEmailExist(string email)
         //{
-        //    var result = _userDal.GetAll(u => u.Email == email).Any();
+        //    var result = _userDal.GetList(u => u.Email == email).Any();
         //    if (result)
         //    {
         //        return new ErrorResult(Messages.EmailAlreadyExist);

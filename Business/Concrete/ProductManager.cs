@@ -10,14 +10,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Business.BusinessAspects.Autofac;
+using Core.Aspects.Autofac.Caching;
+using Core.Aspects.Autofac.Transaction;
 using Core.Utilities.Business;
+using Core.Aspects.Autofac.Performance;
+using System.Threading;
+using Business.CCS;
 
 namespace Business.Concrete
 {
     public class ProductManager : IProductService
     {
-        IProductDal _productDal;
-        private ICategoryService _categoryService;
+        private readonly IProductDal _productDal;
+        private readonly ICategoryService _categoryService;
 
         public ProductManager(IProductDal productDal, ICategoryService categoryService)
         {
@@ -27,6 +32,7 @@ namespace Business.Concrete
 
         [SecuredOperation("product.add,admin")]
         [ValidationAspect(typeof(ProductValidator))]
+        [CacheRemoveAspect("IProductService.Get")]
         public IResult Add(Product product)
         {
             #region Attribute Öncesi Kod Yapisi
@@ -125,6 +131,7 @@ namespace Business.Concrete
         //Claim
         [SecuredOperation("product.add,admin")]
         [ValidationAspect(typeof(ProductValidator))]
+        [CacheRemoveAspect("IProductService.Get")]
         public IResult Update(Product product)
         {
             if (CheckIfProductCountOfCategoryCorrect(product.CategoryId).Success)
@@ -139,12 +146,14 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
+        [CacheRemoveAspect("IProductService.Get")]
         public IResult Delete(int productId)
         {
             throw new NotImplementedException();
         }
 
-        public IDataResult<List<Product>> GetAll()
+        [PerformanceAspect(5)]
+        public IDataResult<List<Product>> GetList()
         {
             //Is Kodlari
             //Yetkisi var mi?
@@ -153,15 +162,19 @@ namespace Business.Concrete
             {
                 return new ErrorDataResult<List<Product>>(Messages.MaintenanceTime);
             }
-
+            Thread.Sleep(5000);
             return new SuccessDataResult<List<Product>>(_productDal.GetAll(), Messages.ProductsListed);
         }
 
-        public IDataResult<List<Product>> GetAllByCategoryId(int id)
+        [SecuredOperation("Product.List,Admin")]
+        //[LogAspect(typeof(FileLogger))]
+        [CacheAspect(duration: 10)]
+        public IDataResult<List<Product>> GetListByCategory(int id)
         {
             return new SuccessDataResult<List<Product>>(_productDal.GetAll(p => p.CategoryId == id));
         }
 
+        [CacheAspect]
         public IDataResult<Product> GetById(int productId)
         {
             return new SuccessDataResult<Product>(_productDal.Get(p => p.ProductId == productId));
@@ -181,6 +194,14 @@ namespace Business.Concrete
             }
 
             return new SuccessDataResult<List<ProductDetailDto>>(_productDal.GetProductDetails());
+        }
+
+        [TransactionScopeAspect]
+        public IResult AddTransactionanTest(Product product)
+        {
+            _productDal.Update(product);
+            _productDal.Add(product);
+            return new SuccessResult(Messages.ProductUptaded);
         }
     }
 }

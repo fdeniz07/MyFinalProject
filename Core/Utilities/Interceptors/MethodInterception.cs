@@ -1,20 +1,19 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Castle.DynamicProxy;
 
 namespace Core.Utilities.Interceptors;
 
 public abstract class MethodInterception : MethodInterceptionBaseAttribute
 {
-
     //Burada kendimize göre bir try-catch-finally blogu olusturup tüm kontroller icin reflextion ve delegate ler ile buraya cagirip, duruma göre kontrol edecegiz.
     //Bu sayede tek bir yapi ile benzer isleri yapan class ve metotlari kontrol etmis olup, yapimizi merkeziyetci konuma cekecegiz.
-    
+
     //invocation : Business Method
     protected virtual void OnBefore(IInvocation invocation) { }
     protected virtual void OnAfter(IInvocation invocation) { }
     protected virtual void OnException(IInvocation invocation, System.Exception e) { }
     protected virtual void OnSuccess(IInvocation invocation) { }
-
 
     public override void Intercept(IInvocation invocation)
     {
@@ -25,6 +24,8 @@ public abstract class MethodInterception : MethodInterceptionBaseAttribute
         try
         {
             invocation.Proceed();
+            var result = invocation.ReturnValue as Task;
+            result?.Wait();
         }
         catch (Exception e)
         {
