@@ -30,7 +30,7 @@ namespace Business.Concrete
             _categoryService = categoryService;
         }
 
-        [SecuredOperation("product.add,admin")]
+        //[SecuredOperation("product.add,admin")]
         [ValidationAspect(typeof(ProductValidator))]
         [CacheRemoveAspect("IProductService.Get")]
         public IResult Add(Product product)
@@ -129,7 +129,8 @@ namespace Business.Concrete
         }
 
         //Claim
-        [SecuredOperation("product.add,admin")]
+        //[SecuredOperation("product.add,admin")]
+        [SecuredOperation("user")]
         [ValidationAspect(typeof(ProductValidator))]
         [CacheRemoveAspect("IProductService.Get")]
         public IResult Update(Product product)
@@ -152,7 +153,7 @@ namespace Business.Concrete
             throw new NotImplementedException();
         }
 
-        [PerformanceAspect(5)]
+        [PerformanceAspect(5)] // islem 5sn den fazla sürerse outputtan takip edebilecegiz.
         public IDataResult<List<Product>> GetList()
         {
             //Is Kodlari
@@ -162,7 +163,7 @@ namespace Business.Concrete
             {
                 return new ErrorDataResult<List<Product>>(Messages.MaintenanceTime);
             }
-            Thread.Sleep(5000);
+            Thread.Sleep(5000); //uygulamayi 5sn ligine durdurup, performance aspect'ini test ediyoruz.
             return new SuccessDataResult<List<Product>>(_productDal.GetAll(), Messages.ProductsListed);
         }
 
